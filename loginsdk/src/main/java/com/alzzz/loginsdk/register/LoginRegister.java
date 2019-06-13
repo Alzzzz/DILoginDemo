@@ -1,6 +1,7 @@
 package com.alzzz.loginsdk.register;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import com.alzzz.loginsdk.annotation.Action;
 import com.alzzz.loginsdk.annotation.LoginController;
@@ -26,22 +27,24 @@ public class LoginRegister {
         targetController = clazz;
     }
 
-    public static void executeTargetAction(String action) {
+    @Nullable
+    public static ILoginController executeTargetAction(Context mContext, String action) {
         try {
             //根据action找到对应的方法
             Class clazz = targetController;
             if (clazz == null) {
-                return;
+                return null;
             }
 
             Constructor<ILoginController> constructor =
-                    targetController.getConstructor(null);
-            Object obj = constructor.newInstance();
+                    targetController.getConstructor(new Class[]{Context.class});
+            Object obj = constructor.newInstance(mContext);
 
             Method actionMethod = getCachedMethod(action, clazz);
             if (actionMethod != null) {
                 actionMethod.setAccessible(true);
-                actionMethod.invoke(obj);
+                ILoginController iLoginController = (ILoginController) actionMethod.invoke(obj);
+                return iLoginController;
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -52,6 +55,7 @@ public class LoginRegister {
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private static Method getCachedMethod(String action, Class clz) {
@@ -67,7 +71,8 @@ public class LoginRegister {
                     continue;
                 }
                 String methodAction = annotation.action();
-                if (action.equalsIgnoreCase(methodAction)) {
+                if (action.equalsIgnoreCase(methodAction)
+                        && method.getReturnType().isAssignableFrom(ILoginController.class)) {
                     if (sCachedAction == null) {
                         sCachedAction = new HashMap<>();
                     }

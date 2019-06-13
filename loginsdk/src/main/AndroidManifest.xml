@@ -3,7 +3,15 @@
     package="com.alzzz.loginsdk" >
     <application>
         <activity
-            android:name=".LoginActivity"
+            android:name=".CommonLoginActivity"
+            android:configChanges="keyboardHidden|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".InvokeLoginActivity"
+            android:configChanges="keyboardHidden|locale"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SLLoginActivity"
             android:configChanges="keyboardHidden|locale"
             android:screenOrientation="portrait"/>
     </application>

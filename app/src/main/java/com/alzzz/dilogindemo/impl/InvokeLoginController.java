@@ -18,10 +18,11 @@ public class InvokeLoginController implements ILoginController {
     }
 
     @Override
-    public void login(String account, String password) {
+    public boolean login(String account, String password) {
         if ("333".equalsIgnoreCase(account) 
                 && "444".equalsIgnoreCase(password)){
-            Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
+            return true;
         }
+        return false;
     }
 }

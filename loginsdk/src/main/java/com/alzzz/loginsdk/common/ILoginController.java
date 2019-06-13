@@ -6,5 +6,5 @@ package com.alzzz.loginsdk.common;
  * @Author sz
  */
 public interface ILoginController {
-    void login(String account, String password);
+    boolean login(String account, String password);
 }

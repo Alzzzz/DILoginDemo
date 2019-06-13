@@ -1,6 +1,6 @@
 package com.alzzz.loginsdk.common;
 
-import com.alzzz.loginsdk.LoginActivity;
+import com.alzzz.loginsdk.CommonLoginActivity;
 
 /**
  * @Description CommonLoginController
@@ -8,18 +8,19 @@ import com.alzzz.loginsdk.LoginActivity;
  * @Author sz
  */
 public class CommonLoginController implements ILoginController {
-    LoginActivity activity;
+    CommonLoginActivity activity;
 
-    public CommonLoginController(LoginActivity activity) {
+    public CommonLoginController(CommonLoginActivity activity) {
         this.activity = activity;
     }
 
     @Override
-    public void login(String account, String password) {
+    public boolean login(String account, String password) {
         if ("111".equals(account) && "222".equals(password)){
             activity.onLoginSuccessed();
         } else {
             activity.onLoginFailed();
         }
+        return false;
     }
 }

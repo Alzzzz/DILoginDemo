@@ -1,8 +1,11 @@
 package com.alzzz.dilogindemo.action;
 
 import android.content.Context;
+import android.widget.Toast;
 
+import com.alzzz.loginsdk.annotation.Action;
 import com.alzzz.loginsdk.annotation.LoginController;
+import com.alzzz.loginsdk.common.ILoginController;
 
 /**
  * @Description LoginService
@@ -11,7 +14,13 @@ import com.alzzz.loginsdk.annotation.LoginController;
  */
 @LoginController
 public class LoginService {
+    private Context mContext;
+    public LoginService(Context mContext) {
+        this.mContext = mContext;
+    }
 
-    public LoginService() {
+    @Action(action = "doLogin")
+    public ILoginController outterDoLogin(){
+        return new SLLoginController(mContext);
     }
 }

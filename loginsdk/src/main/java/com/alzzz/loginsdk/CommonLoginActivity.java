@@ -1,6 +1,5 @@
 package com.alzzz.loginsdk;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +11,12 @@ import android.widget.Toast;
 import com.alzzz.loginsdk.common.CommonLoginController;
 import com.alzzz.loginsdk.common.ILoginController;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 /**
  * @Description LoginActivity
  * @Date 2019-06-10
  * @Author sz
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class CommonLoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText accountEt;
     EditText passwordEt;
     Button loginBtn;
@@ -39,24 +34,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initController() {
-        try {
-            //反射登录逻辑
-            Class clazz = Class.forName("com.alzzz.dilogindemo.impl.InvokeLoginController");
-            Constructor<ILoginController> constructor = clazz.getConstructor(new Class[]{Context.class});
-            loginController = constructor.newInstance(this);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
-//        //普通登录逻辑
-//        loginController = new CommonLoginController(this);
+        //普通登录逻辑
+        loginController = new CommonLoginController(this);
     }
 
     @Override
