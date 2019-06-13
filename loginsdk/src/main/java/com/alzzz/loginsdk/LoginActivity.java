@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initController() {
         try {
+            //反射登录逻辑
             Class clazz = Class.forName("com.alzzz.dilogindemo.impl.InvokeLoginController");
             Constructor<ILoginController> constructor = clazz.getConstructor(new Class[]{Context.class});
             loginController = constructor.newInstance(this);
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
+//        //普通登录逻辑
 //        loginController = new CommonLoginController(this);
     }
 
