@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.alzzz.dilogindemo.action.LoginService;
+import com.alzzz.dilogindemo.di.DiLoginPresenter;
 import com.alzzz.loginsdk.CommonLoginActivity;
+import com.alzzz.loginsdk.DILoginActivity;
 import com.alzzz.loginsdk.InvokeLoginActivity;
 import com.alzzz.loginsdk.SLLoginActivity;
+import com.alzzz.loginsdk.di.DILoginRegister;
 import com.alzzz.loginsdk.register.LoginRegister;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,9 +21,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         LoginRegister.bind(LoginService.class);
+        DILoginRegister.bind(DiLoginPresenter.class);
     }
 
     public void jumpIntoDILogin(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, DILoginActivity.class);
+        startActivity(intent);
     }
 
     public void jumpIntoSLLogin(View view) {

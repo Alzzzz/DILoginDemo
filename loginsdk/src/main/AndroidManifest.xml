@@ -14,5 +14,10 @@
             android:name=".SLLoginActivity"
             android:configChanges="keyboardHidden|locale"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".DILoginActivity"
+            android:configChanges="keyboardHidden|locale"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>
