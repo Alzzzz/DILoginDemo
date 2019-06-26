@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.alzzz.loginsdk.common.ILoginController;
 import com.alzzz.loginsdk.di.DILoginRegister;
 import com.alzzz.loginsdk.di.LoginModule;
-import com.alzzz.loginsdk.register.LoginRegister;
 
 /**
  * @Description DILoginActivity
@@ -59,5 +58,11 @@ public class DILoginActivity extends AppCompatActivity implements View.OnClickLi
 
     public void onLoginFailed(){
         Toast.makeText(this, "登录失败", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DILoginRegister.onDestory();
     }
 }

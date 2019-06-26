@@ -30,7 +30,8 @@ public class DILoginRegister {
     private static final String TAG = DILoginRegister.class.getSimpleName();
     private static Class targetController;
     private static Map<String, SoftReference<Method>> sCachedAction = new HashMap<>();
-    private static Map<Class, SoftReference<Method>> mModuleMethedMap = new HashMap<>();
+    private static Map<Class, SoftReference<Method>> mModuleMethodMap = new HashMap<>();
+    private static Map<Class, SoftReference<Object>> mInjectedObjs = new HashMap<>();
     private static Object module;
 
     public static void bind(@LoginController Class clazz) {
@@ -44,7 +45,7 @@ public class DILoginRegister {
             Provider provider = method.getAnnotation(Provider.class);
             if (provider != null){
                 Class returnType = method.getReturnType();
-                mModuleMethedMap.put(returnType, new SoftReference<>(method));
+                mModuleMethodMap.put(returnType, new SoftReference<>(method));
             }
         }
 
@@ -106,34 +107,46 @@ public class DILoginRegister {
         Object result = null;
         int index = 0;
         for (Class clazz: paramsClasses){
-            if (mModuleMethedMap.get(clazz) != null){
-                paramsObj[index] = getParamsInstance(mModuleMethedMap.get(clazz).get());
+            if (mModuleMethodMap.get(clazz) != null){
+                paramsObj[index] = getParamsInstance(clazz, mModuleMethodMap.get(clazz).get());
             }
+        }
 
-            try {
-                result = constructor.newInstance(paramsObj);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
+        try {
+            result = constructor.newInstance(paramsObj);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
         return result;
     }
 
     /**
      * 获取参数的实例
+     *
+     * @param clazz
      * @param method
      * @param args
      * @return
      */
-    private static Object getParamsInstance(Method method, Object... args) {
+    private static Object getParamsInstance(Class clazz, Method method, Object... args) {
+        if (mInjectedObjs == null){
+            mInjectedObjs = new HashMap<>();
+        } else {
+            if (mInjectedObjs.get(clazz) != null && mInjectedObjs.get(clazz).get() !=null){
+                Log.d(TAG, "Existing instance objects");
+                return mInjectedObjs.get(clazz).get();
+            }
+        }
+
         Object object = null;
         if (method != null){
             try {
                 object = method.invoke(module, args);
+                mInjectedObjs.put(clazz, new SoftReference<>(object));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
@@ -141,6 +154,14 @@ public class DILoginRegister {
             }
         }
         return object;
+    }
+
+    /**
+     * 清空所有对象
+     */
+    public static void onDestory(){
+        mInjectedObjs.clear();
+        mInjectedObjs = null;
     }
 
     /**
